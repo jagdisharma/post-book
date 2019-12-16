@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load staticfiles %}
+<div class="d-flex justify-content-center pt-2">
+    <div class="col-md-8">
+        {% for post in posts.all %}
+       <div class="card text-white bg-dark mb-3" style="max-width: 42rem;" >
+           <div class="card-header">
+               <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/> {{ post.posted_by.username }}<br>
+               <small class="form-text text-muted">
+                    {% now "Y-m-d" as todays_date %}
+                    {% if post.pub_date|date:"Y-m-d" < todays_date  %}
+                        {{ post.pub_date|date:"M d, Y H:m" }}
+                    {% else %}
+                        Today
+                   {% endif %}
+               </small>
+           </div>
+           <div class="card-body" style="cursor:pointer;max-width: 42rem;" onclick="window.location='{% url 'details' post.id %}'">
+<!--               <h5 class="card-title">Dark card title</h5>-->
+               <p class="card-text">{{ post.title }}</p>
+               {% if post.image %}
+                    <img src="media/{{ post.image }}" class="img-fluid">
+               {% endif %}
+           </div>
+           <div class="card-footer">
+               <p style="font-size: 1.5em;">
+                       <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i> 5</p>
+           </div>
+       </div>
+<!--        <form action="{% url 'like' post.id %}" method="post" >-->
+<!--            {% csrf_token %}-->
+<!--            <input type="hidden">-->
+<!--        </form>-->
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $('.like').mouseover(function(){
+        $(this).removeClass('fa-heart-o');
+        $(this).addClass('fa-heart');
+        $(this).css({
+            "color": "red",
+        });
+    }).mouseout(function() {
+        $(this).removeClass('fa-heart');
+        $(this).addClass('fa-heart-o');
+        $(this).css({
+            "color": "white",
+        });
+    });
+
+
+</script>
+{% endblock %}

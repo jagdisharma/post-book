@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content%}
+<div class="row container-new">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                 <div onclick="window.location='{% url 'viewUserProfile' username=viewUser.username %}'">
+                    <img src="{% static 'default_profile.png' %}" width="120" height="120" style="border-radius: 50%;"/>
+                </div>
+            </div>
+             <div class="col-md-5">
+                 <div class="row">
+                     <div class="col-md-12">
+                         <p class="h4 font-weight-bold">{{ viewUser.username }}</p>
+                     </div>
+                     <div class="col-md-12">
+                         <p>Hi am a Software Developer and i love coding.</p>
+                         <b>{{ followers|length }} Followers</b> &nbsp;&nbsp;&nbsp; <b>{{ followings|length }} Following</b>
+                     </div>
+                 </div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                     <div class="col-md-12">
+                        {% if followedByLoggedInUser %}
+                            <button class="btn btn-outline-info" onclick="window.location='{% url 'unfollow' user_id=viewUser.id %}'">UnFollow</button>
+                         {% else %}
+                            <button class="btn btn-outline-info" onclick="window.location='{% url 'follow' user_id=viewUser.id %}'">Follow</button>
+                         {% endif %}
+                     </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+         <div class="row view-profile-user-post">
+             <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-2">
+                        <h4>{{ posts|length }} Posts</h4>
+                    </div>
+                  </div>
+                 {% for post in posts.all %}
+                     <div class="card text-white bg-dark mb-3" style="max-width: 42rem;" >
+                       <div class="card-header">
+                           <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/> {{ post.posted_by.username }}<br>
+                           <small class="form-text text-muted">
+                                {% now "Y-m-d" as todays_date %}
+                                {% if post.pub_date|date:"Y-m-d" < todays_date  %}
+                                    {{ post.pub_date|date:"M d, Y H:m" }}
+                                {% else %}
+                                    Today
+                               {% endif %}
+                           </small>
+                       </div>
+                       <div class="card-body" style="cursor:pointer;max-width: 42rem;" onclick="window.location='{% url 'details' post.id %}'">
+            <!--               <h5 class="card-title">Dark card title</h5>-->
+                           <p class="card-text">{{ post.title }}</p>
+                           {% if post.image %}
+                                <img src="/media/{{ post.image }}" class="img-fluid">
+                           {% endif %}
+                       </div>
+                       <div class="card-footer">
+                           <p style="font-size: 1.5em;">
+                                   <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i> 5</p>
+                       </div>
+                   </div>
+                 {% endfor %}
+             </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}

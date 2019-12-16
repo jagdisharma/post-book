@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block content%}
+<h1>Login</h1>
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+<div class="row">
+    <div class="col-md-8">
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+            Username:
+            <input type="text" placeholder="Username" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                Password:
+                <input type="password" placeholder="****" class="form-control" name="password">
+            </div>
+
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Login" name="login">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

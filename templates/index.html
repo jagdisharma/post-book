@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load staticfiles %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Post Book</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="{% static 'icon/font/css/open-iconic-bootstrap.css' %}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="album.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'logo.png' %}" >
+    <link rel="stylesheet"  href="{% static 'css/style.css' %}" >
+  </head>
+  <body>
+    {% include 'common/header.html' %}
+
+<div class="container">
+  {% if user.is_authenticated %}
+    {% if not user.verified %}
+      <div class="verify text-center">
+        <h5>You have not verified your mobile number. Please <a href="{% url 'verify' %}">verify</a>.</h5>
+      </div>
+    {% endif %}
+  {% endif %}
+  {% block content %}
+
+  {% endblock %}
+</div>
+
+<footer class="text-muted">
+  <div class="container">
+    <p class="text-center">
+      &copy; Jagdish Sharma {% now "Y" %}
+    </p>
+  </div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $("#navbarDropdown").on('click',function () {
+          console.log('here');
+
+
+          $.ajax({
+            url: '{% url 'notifications' %}',
+            dataType: 'json',
+            success: function (data) {
+                var html = "";
+                var unreadNotifications = 0;
+                if (data.userNotifications.length>0) {
+                  unreadNotifications = data.userNotifications.length;
+                }
+
+                $.each(data.userNotifications, function (i) {
+                    var add_class = '';
+                    if (i%2 != 0) {
+                      add_class = 'bg-gray';
+                    }
+                    var date = new Date(data.userNotifications[i].created_at);
+                    var formatedDate = format_date(date);
+
+                    html += "<li class='notification-box "+add_class+"'><div class='row'><div class='col-lg-3 col-sm-3 col-3 text-center'><img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'></div><div class='col-lg-8 col-sm-8 col-8'><div><b>"+data.userNotifications[i].user_who_fired_event_name+"</b> followed you</div><small class='text-warning'>"+formatedDate+"</small></div></div></li>";
+                });
+                $(".followed_data").html(html);
+                $(".total_notifications").html(unreadNotifications);
+            }
+          });
+
+          function format_date(date) {
+            month=date.getMonth();
+            month=month+1; //javascript date goes from 0 to 11
+            if (month<10) month="0"+month; //adding the prefix
+
+            year=date.getFullYear();
+            day=date.getDate();
+            if (day<10) day="0"+day;
+
+            hour=date.getHours();
+            if (hour<10) hour="0"+hour;
+
+            minutes=date.getMinutes();
+            if (minutes<10) minutes="0"+minutes;
+
+            return day+"/"+month+"/"+year+" "+hour+":"+minutes;
+
+          }
+        });
+      </script>
+    {% block javascript %}
+
+    {% endblock %}
+  </body>
+</html>

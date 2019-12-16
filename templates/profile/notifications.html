@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content%}
+<h1>Notifications</h1>
+<div class="row">
+    {% if notifications.all|length %}
+        {% for notification in notifications.all %}
+            <div class="col-md-12">
+                <div class="row tabs-container">
+                    <div class="col-md-2">
+                        <img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'>
+                    </div>
+                    <div class='col-md-8'>
+                            <b>{{ notification.user_who_fired_event.username }}</b> {{ notification.event_id.comment }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You don't have any notification.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

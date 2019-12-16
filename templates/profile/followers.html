@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content%}
+<h1>Followers</h1>
+<div class="row following-container">
+    {% if followers.all|length %}
+        {% for follower in followers.all %}
+            <div class="col-md-12">
+                <div class="row tabs-container">
+                    <div class="col-md-2">
+                        <img style="cursor:pointer;" onclick="window.location='{% url 'viewUserProfile' username=follower.user_from.username %}'" class="profile_picture" src="{% static 'default_profile.png' %}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row user-label">
+                            <div class="col-md-3">
+                                <p class="username-label" style="cursor:pointer;" onclick="window.location='{% url 'viewUserProfile' username=follower.user_from.username %}'">{{ follower.user_from }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You don't have any Followers</p>
+    {% endif %}
+</div>
+
+{% endblock %}

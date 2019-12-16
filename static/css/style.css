@@ -1,0 +1,197 @@
+
+.verify {
+    background-color: #bbfa24;
+    padding: 5px;
+}
+
+.profile_pic {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.user_profile_pic {
+  vertical-align: middle;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+a {
+    text-decoration: none !important;
+    cursor:pointer;
+    color:white;
+}
+
+a:hover {
+    color:white;
+}
+
+.container{
+    height: 100%;
+    align-content: center;
+}
+
+.image_outer_container{
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 50%;
+    position: relative;
+ }
+
+.image_inner_container{
+    border-radius: 50%;
+    padding: 5px;
+    background: #833ab4;
+    background: -webkit-linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+    background: linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+}
+.image_inner_container img{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+.image_outer_container .green_icon{
+     background-color: #4cd137;
+     position: absolute;
+     right: 30px;
+     bottom: 10px;
+     height: 30px;
+     width: 30px;
+     border:5px solid white;
+     border-radius: 50%;
+}
+
+
+.followers {
+    background: #840edd;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.followers:hover {
+    background: #52078b;
+}
+
+.following {
+    background: #1496c8;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.following:hover {
+    background: #0877a1;
+}
+.profile,
+.following-container,
+.followers-container,
+.container-new {
+    margin-top: 25px;
+    padding-top: 25px;
+    background: aliceblue;
+    padding-bottom: 50px;
+}
+
+.change_password {
+    background: #fcab44;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.change_password:hover {
+    background: #d37907;
+}
+
+.profile_picture {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+.tabs-container {
+    padding: 10px;padding: 10px;
+}
+
+.username-label {
+    font-size: large;
+    font-weight: bold;
+}
+
+.user-label {
+     padding-top: 25px;
+}
+
+.view-profile-user-post {
+    padding: 25px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+  background-color: #17A2B8;
+}
+.dropdown-menu{
+  top: 45px;
+  right: 0px;
+  left: unset;
+  width: 300px;
+  box-shadow: 0px 5px 7px -1px #c1c1c1;
+  padding-bottom: 0px;
+  padding: 0px;
+}
+.dropdown-menu:before{
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 12px;
+  border:10px solid #343A40;
+  border-color: transparent transparent #db542b transparent;
+}
+.head{
+  padding:5px 15px;
+  border-radius: 3px 3px 0px 0px;
+}
+.footer{
+  padding:5px 15px;
+  border-radius: 0px 0px 3px 3px;
+}
+.notification-box{
+  padding: 10px 0px;
+}
+.bg-gray{
+  background-color: #eee;
+}
+@media (max-width: 640px) {
+    .dropdown-menu{
+      top: 50px;
+      left: -16px;
+      width: 290px;
+    }
+    .nav{
+      display: block;
+    }
+    .nav .nav-item,.nav .nav-item a{
+      padding-left: 0px;
+    }
+    .message{
+      font-size: 13px;
+    }
+}
+
+.like {
+   cursor: pointer;
+}
+
+/*.fa-heart-o:before:hover {*/
+/*    !*color: red;*!*/
+/*    content : "\f004";*/
+/*}*/

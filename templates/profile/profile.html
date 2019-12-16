@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content%}
+<h1>My Profile</h1>
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+<div class="row profile">
+    <div class="col-md-12">
+        <div class="container">
+            <div class="d-flex justify-content-center h-100">
+                <div class="image_outer_container">
+                    <div class="green_icon"></div>
+                    <div class="image_inner_container">
+                        <img src="{% static 'default_profile.png' %}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 d-flex justify-content-center">
+        <h4 class="text-uppercase">{{ user.username }}</h4>
+    </div>
+    <div class="col-md-12 ">
+        <div class="row">
+            <div class="col-md-6 text-center followers">
+                {% if followers|length > 0  %}
+                    <a href="{% url 'followers' %}">Followers {{ followers|length }}</a>
+                {% else %}
+                    <a href="{% url 'followers' %}">You don't have any Followers</a>
+                {% endif%}
+            </div>
+            <div class="col-md-6 text-center following">
+                {% if following|length > 0  %}
+                    <a href="{% url 'following' %}">Following {{ following|length }}</a>
+                {% else %}
+                    <a href="{% url 'following' %}">You are not Following to anyone</a>
+                {% endif%}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 ">
+        <div class="row">
+            <div class="col-md-12 text-center change_password">
+                <a href="{% url 'changePassword' %}" >Change Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block content%}
+
+<div class="row d-flex justify-content-center" >
+    <div class="col-md-8">
+        <h1>Verify Mobile Number</h1>
+    {% if error %}
+        <div class="col-md-10 alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="col-md-10 alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="col-md-10">
+            <form method="post" action="{% url 'verify' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="opt_number"> OTP</label>
+                    <input type="number" placeholder="123456" min="0" required class="form-control" name="opt_number">
+                </div>
+
+                    <input type="submit" class="btn btn-primary form-control" value="Verify Mobile Number" name="verify">
+            </form>
+            <div class="text-right pt-2">
+                    <button class="btn btn-outline-dark btn-sm" onclick="window.location='{% url 'sendOtp' %}'">Send OTP</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
