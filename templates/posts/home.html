@@ -4,11 +4,16 @@
 {% load static %}
 <div class="d-flex justify-content-center pt-2">
     <div class="col-md-8">
-        {% for post in posts.all %}
+        {% for post in posts %}
        <div class="card text-white bg-dark mb-3" style="max-width: 42rem;" >
            <div class="card-header">
-               <div style="cursor:pointer;" onclick="window.location='{% url 'viewUserProfile' username=post.posted_by.username %}'">
-                    <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/> {{ post.posted_by.username }}<br>
+               <div style="cursor:pointer;" >
+                   <p  onclick="window.location='{% url 'viewUserProfile' username=post.posted_by %}'" style="width: fit-content;">
+                   {% if post.posted_by_profile_pic %}
+                            <img src="/media/{{ post.posted_by_profile_pic }}" width="40" height="40" class="profile_pic" style="object-fit: cover;">
+                   {% else %}
+                        <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic">
+                   {% endif %}{{ post.posted_by }}</p>
                </div>
                <small class="form-text text-muted">
                     {% now "Y-m-d" as todays_date %}
@@ -28,7 +33,12 @@
            </div>
            <div class="card-footer">
                <p style="font-size: 1.5em;">
-                       <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i> 5</p>
+                   {% if post.liked_by_loggedin_user %}
+                        <i class="fa fa-heart like fa-like" onclick="window.location='{% url 'like' post.id %}'"></i>
+                   {% else %}
+                       <i class="fa fa-heart like"  onclick="window.location='{% url 'like' post.id %}'"></i>
+                    {% endif %}
+               {{ post.total_likes }}</p>
            </div>
        </div>
 <!--        <form action="{% url 'like' post.id %}" method="post" >-->
@@ -41,20 +51,6 @@
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
-    $('.like').mouseover(function(){
-        $(this).removeClass('fa-heart-o');
-        $(this).addClass('fa-heart');
-        $(this).css({
-            "color": "red",
-        });
-    }).mouseout(function() {
-        $(this).removeClass('fa-heart');
-        $(this).addClass('fa-heart-o');
-        $(this).css({
-            "color": "white",
-        });
-    });
-
 
 </script>
 {% endblock %}

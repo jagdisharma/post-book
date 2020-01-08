@@ -33,12 +33,22 @@ a:hover {
     align-content: center;
 }
 
+.followed_data {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 300px !important;
+}
 .image_outer_container{
     margin-top: auto;
     margin-bottom: auto;
     border-radius: 50%;
     position: relative;
+    cursor: pointer;
  }
+
+#profile_pic_form {
+    display: none;
+}
 
 .image_inner_container{
     border-radius: 50%;
@@ -191,6 +201,24 @@ a:hover {
    cursor: pointer;
 }
 
+.fa-heart:hover {
+    color: red;
+}
+
+.fa-like {
+    color: red;
+}
+
+.fa-like:hover {
+    color: white;
+}
+
+.notification-box-pic {
+    object-fit: cover;
+    height: 50px;
+    width: 50px;
+    margin-left: 10px;
+}
 /*.fa-heart-o:before:hover {*/
 /*    !*color: red;*!*/
 /*    content : "\f004";*/

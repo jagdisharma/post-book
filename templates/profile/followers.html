@@ -8,7 +8,11 @@
             <div class="col-md-12">
                 <div class="row tabs-container">
                     <div class="col-md-2">
-                        <img style="cursor:pointer;" onclick="window.location='{% url 'viewUserProfile' username=follower.user_from.username %}'" class="profile_picture" src="{% static 'default_profile.png' %}">
+                        {% if follower.user_from.profile_pic %}
+                        <img style="cursor:pointer;object-fit: cover" onclick="window.location='{% url 'viewUserProfile' username=follower.user_from.username %}'" class="profile_picture" src="/media/{{ follower.user_from.profile_pic }}">
+                        {% else %}
+                            <img style="cursor:pointer;" onclick="window.location='{% url 'viewUserProfile' username=follower.user_from.username %}'" class="profile_picture" src="{% static 'default_profile.png' %}">
+                        {% endif %}
                     </div>
                     <div class="col-md-8">
                         <div class="row user-label">

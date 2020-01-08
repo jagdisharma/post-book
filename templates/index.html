@@ -52,7 +52,7 @@
   {% endblock %}
 </div>
 
-<footer class="text-muted">
+<footer class="text-muted mt-2 p-2 bg-dark">
   <div class="container">
     <p class="text-center">
       &copy; Jagdish Sharma {% now "Y" %}
@@ -64,9 +64,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $("#navbarDropdown").on('click',function () {
-          console.log('here');
-
-
           $.ajax({
             url: '{% url 'notifications' %}',
             dataType: 'json',
@@ -77,6 +74,7 @@
                   unreadNotifications = data.userNotifications.length;
                 }
 
+                var domain_name = '{{ request.META.HTTP_HOST }}';
                 $.each(data.userNotifications, function (i) {
                     var add_class = '';
                     if (i%2 != 0) {
@@ -85,7 +83,15 @@
                     var date = new Date(data.userNotifications[i].created_at);
                     var formatedDate = format_date(date);
 
-                    html += "<li class='notification-box "+add_class+"'><div class='row'><div class='col-lg-3 col-sm-3 col-3 text-center'><img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'></div><div class='col-lg-8 col-sm-8 col-8'><div><b>"+data.userNotifications[i].user_who_fired_event_name+"</b> followed you</div><small class='text-warning'>"+formatedDate+"</small></div></div></li>";
+                    html += "<li class='notification-box "+add_class+"'><div class='row'><div class='col-lg-3 col-sm-3 col-3 text-center'>";
+                    if (data.userNotifications[i].profile_pic) {
+                      html +=  "<img  src='/media/"+data.userNotifications[i].profile_pic+"' class='notification-box-pic rounded-circle'>";
+                    } else {
+                      html +=  "<img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'>";
+                    }
+
+
+                    html +="</div><div class='col-lg-8 col-sm-8 col-8'><div><b>"+data.userNotifications[i].user_who_fired_event_name+"</b> "+data.userNotifications[i].event_comment+"</div><small class='text-warning'>"+formatedDate+"</small></div></div></li>";
                 });
                 $(".followed_data").html(html);
                 $(".total_notifications").html(unreadNotifications);

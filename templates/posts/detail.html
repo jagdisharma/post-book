@@ -7,7 +7,13 @@
     <div class="col-md-8">
         <div class="card text-white bg-dark mb-3" style="max-width: 42rem;">
            <div class="card-header">
-               <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/> {{ post.posted_by.username }}<br>
+               <p onclick="window.location='{% url 'viewUserProfile' username=post.posted_by.username %}'" style="cursor:pointer;width: fit-content;">
+                {% if post.posted_by.profile_pic %}
+                    <img src="/media/{{ post.posted_by.profile_pic }}" width="40" height="40" class="profile_pic" style="object-fit: cover;">
+               {% else %}
+                    <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic">
+               {% endif %}
+               {{ post.posted_by.username }}</p>
                <small class="form-text text-muted">
                     {% now "Y-m-d" as todays_date %}
                     {% if post.pub_date|date:"Y-m-d" < todays_date  %}
@@ -27,10 +33,10 @@
            <div class="card-footer">
                <p style="font-size: 1.5em;">
                    {% if likedbycurrentUser %}
-                        <i class="fa fa-heart like" style="color: red;" onclick="window.location='{% url 'like' post.id %}'"></i>
+                        <i class="fa fa-heart like fa-like" onclick="window.location='{% url 'like' post.id %}'"></i>
                    {% else %}
-                        <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i>
-                   {% endif %}
+                       <i class="fa fa-heart like"  onclick="window.location='{% url 'like' post.id %}'"></i>
+                    {% endif %}
                    {{ likes }}
                </p>
            </div>
@@ -40,21 +46,6 @@
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
-    var toggleWhen = '{{ likedbycurrentUser }}';
-    if (toggleWhen != 'True') {
-            $('.like').mouseover(function(){
-            $(this).removeClass('fa-heart-o');
-            $(this).addClass('fa-heart');
-            $(this).css({
-                "color": "red",
-            });
-        }).mouseout(function() {
-            $(this).removeClass('fa-heart');
-            $(this).addClass('fa-heart-o');
-            $(this).css({
-                "color": "white",
-            });
-        });
-    }
+
 </script>
 {% endblock %}

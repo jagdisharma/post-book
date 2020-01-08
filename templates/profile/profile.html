@@ -14,14 +14,31 @@
                 <div class="image_outer_container">
                     <div class="green_icon"></div>
                     <div class="image_inner_container">
-                        <img src="{% static 'default_profile.png' %}">
+                        {% if user.profile_pic %}
+                            <img src="/media/{{ user.profile_pic }}" style="object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'default_profile.png' %}">
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+     <form method="post" id="profile_pic_form" action="{% url 'uploadProfilePic' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                Profile Pic:
+                <input type="file" placeholder="profile_pic" required class="form-control" id="profile_pic" name="profile_pic">
+            </div>
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Upload" name="Upload">
+     </form>
     <div class="col-md-12 d-flex justify-content-center">
         <h4 class="text-uppercase">{{ user.username }}</h4>
+    </div>
+    <div class="col-md-12">
+        <strong>Email: </strong>{{ user.email }}</br>
+        <strong>Mobile Number: </strong>{{ user.contact_number }}</br>
+        <strong>Last Login: </strong>{{ user.last_login }}
     </div>
     <div class="col-md-12 ">
         <div class="row">
@@ -51,4 +68,14 @@
     </div>
 </div>
 
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $('.image_outer_container').on('click', function () {
+        document.getElementById("profile_pic").click();
+    });
+    $('#profile_pic').on('change', function () {
+        $('#profile_pic_form').submit();
+    });
+</script>
 {% endblock %}

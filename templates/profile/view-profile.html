@@ -6,7 +6,11 @@
         <div class="row">
             <div class="col-md-2">
                  <div onclick="window.location='{% url 'viewUserProfile' username=viewUser.username %}'">
-                    <img src="{% static 'default_profile.png' %}" width="120" height="120" style="border-radius: 50%;"/>
+                     {% if viewUser.profile_pic %}
+                        <img src="/media/{{ viewUser.profile_pic }}" width="120" height="120" style="border-radius: 50%;object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'default_profile.png' %}" width="120" height="120" style="border-radius: 50%;"/>
+                    {% endif %}
                 </div>
             </div>
              <div class="col-md-5">
@@ -40,10 +44,14 @@
                         <h4>{{ posts|length }} Posts</h4>
                     </div>
                   </div>
-                 {% for post in posts.all %}
+                 {% for post in posts %}
                      <div class="card text-white bg-dark mb-3" style="max-width: 42rem;" >
                        <div class="card-header">
-                           <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/> {{ post.posted_by.username }}<br>
+                            {% if viewUser.profile_pic %}
+                                <img src="/media/{{ viewUser.profile_pic }}" width="40" height="40" class="profile_pic" style="object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'default_profile.png' %}" width="40" height="40" class="profile_pic"/>
+                            {% endif %}{{ post.posted_by }}<br>
                            <small class="form-text text-muted">
                                 {% now "Y-m-d" as todays_date %}
                                 {% if post.pub_date|date:"Y-m-d" < todays_date  %}
@@ -62,7 +70,12 @@
                        </div>
                        <div class="card-footer">
                            <p style="font-size: 1.5em;">
-                                   <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i> 5</p>
+                               {% if post.liked_by_loggedin_user %}
+                                    <i class="fa fa-heart like fa-like" onclick="window.location='{% url 'like' post.id %}'"></i>
+                               {% else %}
+                                    <i class="fa fa-heart like"  onclick="window.location='{% url 'like' post.id %}'"></i>
+                               {% endif %}{{ post.total_likes }}
+<!--                                   <i class="fa fa-heart-o like"  onclick="window.location='{% url 'like' post.id %}'"></i> 5</p>-->
                        </div>
                    </div>
                  {% endfor %}

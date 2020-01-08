@@ -1,5 +1,6 @@
 import math
 import random
+import uuid
 from datetime import date, datetime
 from django.contrib import auth, messages
 from django.contrib.auth import update_session_auth_hash
@@ -7,10 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from twilio.rest import Client
+from django.conf import settings
 
 # Create your views here.
 from accounts.models import User, MobileVerification, Follower, Notification, Event
-from posts.models import Post
+from posts.models import Post, Like
 
 
 def signup(request):
@@ -32,7 +34,7 @@ def signup(request):
 
 def login(request):
     if request.method == 'POST':
-        user = auth.authenticate(username=request.POST['username'],password= request.POST['password'])
+        user = auth.authenticate(email=request.POST['email'],password= request.POST['password'])
         if user is not None:
             auth.login(request, user)
             return redirect('home')
@@ -55,6 +57,15 @@ def profile(request):
         'following': following,
         'followers': followers
     })
+
+@login_required(login_url='/accounts/login')
+def uploadProfilePic(request):
+    user = request.user
+    profile_pic = request.FILES.get('profile_pic', None)
+    if profile_pic:
+        user.profile_pic = profile_pic
+        user.save()
+    return redirect('profile')
 
 @login_required(login_url='/accounts/login')
 def verify(request):
@@ -87,11 +98,15 @@ def verify(request):
 
 @login_required(login_url='/accounts/login')
 def sendOtp(request):
-    # otpExist = get_object_or_404(MobileVerification, user=request.user)
-    # if otpExist:
-    #     otpExist.delete()
+    try:
+        otpExist = MobileVerification.objects.get(user=request.user)
+        if otpExist:
+            otpExist.delete()
+    except MobileVerification.DoesNotExist:
+        pass
     otp = generateOTP()
     current_user_contact_number = request.user.contact_number
+    # print(current_user_contact_number)
     current_user_contact_number = '+91' + current_user_contact_number
 
     sendOTP(otp, current_user_contact_number)
@@ -143,7 +158,17 @@ def viewUserProfile(request, username):
     #userData = User.objects.filter(username=username)# for getting multiple entry fron database
     followers = Follower.objects.filter(user_to=userData)
     followings = Follower.objects.filter(user_from=userData)
-    posts = Post.objects.filter(posted_by=userData)
+    posts = Post.objects.filter(posted_by=userData).values()
+    for post in posts:
+        post['total_likes'] = Like.objects.filter(post=post['id'])
+        post['total_likes'] = len(post['total_likes'])
+        liked_by_loggedin_user = Like.objects.filter(post=post['id'], user = request.user.id)
+        post['liked_by_loggedin_user'] = False
+        if liked_by_loggedin_user:
+            post['liked_by_loggedin_user'] = True
+        posted_by = User.objects.get(id=post['posted_by_id'])
+        post['posted_by'] = posted_by.username
+        post['posted_by_profile_pic'] = posted_by.profile_pic
 
     loggedInUserFollow = Follower.objects.filter(user_to=userData, user_from = request.user)
     followedByLoggedInUser = True
@@ -153,7 +178,7 @@ def viewUserProfile(request, username):
         'viewUser': userData,
         'followers' : followers,
         'followings': followings,
-        'posts': posts,
+        'posts': list(posts),
         'followedByLoggedInUser':followedByLoggedInUser
     })
 
@@ -189,6 +214,10 @@ def notifications(request):
     for user in userNotifications:
         user['user_to_notify_name'] =  get_object_or_404(User, pk=user['user_to_notify_id']).username
         user['user_who_fired_event_name'] =  get_object_or_404(User, pk=user['user_who_fired_event_id']).username
+        user_profile = User.objects.filter(id=user['user_who_fired_event_id']).values()
+        for user_profile_pic in user_profile:
+            user['profile_pic'] = user_profile_pic['profile_pic']
+        user['event_comment'] = get_object_or_404(Event, pk=user['event_id_id']).comment
     return JsonResponse({"userNotifications": list(userNotifications)})
 
 @login_required(login_url='/accounts/login')
@@ -199,15 +228,16 @@ def allNotifications(request):
 
 
 def sendOTP(otp, current_user_contact_number):
-    account_sid = "ACfbe1c1a1f6862727cdd0fdf99df03474"
+    account_sid = "AC7aa621f3e57483b996466b9d163fc48d"
     # Your Auth Token from twilio.com/console
-    auth_token = "2b7d95100ee26edb22e815b04897f5e8"
+    auth_token = settings.AUTH_TOKEN
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
         to="+917508332062",
-        from_="+13343578105",
+        from_="+18036755617",
         body="Your 6 digit verification code is " + otp)
+    print(message)
     return True
 
 def generateOTP():

@@ -39,6 +39,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
+    profile_pic = models.ImageField(upload_to='profile_pic/', blank=True)
     contact_number = models.CharField(max_length=10, unique=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)

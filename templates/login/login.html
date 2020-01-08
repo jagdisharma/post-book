@@ -1,23 +1,24 @@
 {% extends 'index.html' %}
 
 {% block content%}
-<h1>Login</h1>
-{% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-{% endif %}
-<div class="row">
-    <div class="col-md-8">
+
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+         <h1>Login</h1>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="form-group">
-            Username:
-            <input type="text" placeholder="Username" class="form-control" name="username">
+                Email Address:
+                <input type="text" required placeholder="Email Address" class="form-control" name="email">
             </div>
             <div class="form-group">
                 Password:
-                <input type="password" placeholder="****" class="form-control" name="password">
+                <input type="password" required placeholder="****" class="form-control" name="password">
             </div>
 
             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Login" name="login">
