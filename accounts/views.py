@@ -207,18 +207,17 @@ def unfollow(request, user_id):
         follower.delete()
     return redirect('viewUserProfile' , username =userExists.username)
 
-@login_required(login_url='/account/login')
-def notifications(request):
-    current_user = request.user
-    userNotifications = Notification.objects.filter(user_to_notify=current_user,seen_by_user=False).order_by('-created_at').values()
-    for user in userNotifications:
-        user['user_to_notify_name'] =  get_object_or_404(User, pk=user['user_to_notify_id']).username
-        user['user_who_fired_event_name'] =  get_object_or_404(User, pk=user['user_who_fired_event_id']).username
-        user_profile = User.objects.filter(id=user['user_who_fired_event_id']).values()
-        for user_profile_pic in user_profile:
-            user['profile_pic'] = user_profile_pic['profile_pic']
-        user['event_comment'] = get_object_or_404(Event, pk=user['event_id_id']).comment
-    return JsonResponse({"userNotifications": list(userNotifications)})
+# def notifications(request):
+#     current_user = request.user
+#     userNotifications = Notification.objects.filter(user_to_notify=current_user,seen_by_user=False).order_by('-created_at').values()
+#     for user in userNotifications:
+#         user['user_to_notify_name'] =  get_object_or_404(User, pk=user['user_to_notify_id']).username
+#         user['user_who_fired_event_name'] =  get_object_or_404(User, pk=user['user_who_fired_event_id']).username
+#         user_profile = User.objects.filter(id=user['user_who_fired_event_id']).values()
+#         for user_profile_pic in user_profile:
+#             user['profile_pic'] = user_profile_pic['profile_pic']
+#         user['event_comment'] = get_object_or_404(Event, pk=user['event_id_id']).comment
+#     return JsonResponse({"userNotifications": list(userNotifications)})
 
 @login_required(login_url='/account/login')
 def allNotifications(request):
@@ -253,3 +252,18 @@ def generateOTP():
 
     return OTP
 
+def myNotifications(request):
+    current_user = request.user
+    if not request.user.is_authenticated:
+        return {}
+    userNotifications = Notification.objects.filter(user_to_notify=current_user,seen_by_user=False).order_by('-created_at').values()
+    for user in userNotifications:
+        user['user_to_notify_name'] =  get_object_or_404(User, pk=user['user_to_notify_id']).username
+        user['user_who_fired_event_name'] =  get_object_or_404(User, pk=user['user_who_fired_event_id']).username
+        user_profile = User.objects.filter(id=user['user_who_fired_event_id']).values()
+        for user_profile_pic in user_profile:
+            user['profile_pic'] = user_profile_pic['profile_pic']
+        user['event_comment'] = get_object_or_404(Event, pk=user['event_id_id']).comment
+    return {
+            "userNotifications": list(userNotifications)
+    }

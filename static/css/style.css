@@ -219,6 +219,16 @@ a:hover {
     width: 50px;
     margin-left: 10px;
 }
+
+.body-container {
+    min-height: 100vh;
+}
+
+.badge{
+    color: white;
+    background-color: #6e6e6a;
+    border-radius: 50%;
+}
 /*.fa-heart-o:before:hover {*/
 /*    !*color: red;*!*/
 /*    content : "\f004";*/

@@ -63,11 +63,12 @@ def like(request, post_id):
         like.user = get_object_or_404(User, pk=current_user)
         like.post = get_object_or_404(Post, pk=post_id)
         like.save()
-        notification = Notification()
-        notification.user_to_notify = user_to_notify
-        notification.user_who_fired_event = request.user
-        notification.event_id = Event.objects.get(pk=2)
-        notification.save()
+        if current_user != postExists.posted_by.id:
+            notification = Notification()
+            notification.user_to_notify = user_to_notify
+            notification.user_who_fired_event = request.user
+            notification.event_id = Event.objects.get(pk=2)
+            notification.save()
     return redirect('/posts/' + str(post_id))
 
 @login_required(login_url='/account/login')

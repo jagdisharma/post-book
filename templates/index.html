@@ -39,7 +39,7 @@
   <body>
     {% include 'common/header.html' %}
 
-<div class="container">
+<div class="container body-container">
   {% if user.is_authenticated %}
     {% if not user.verified %}
       <div class="verify text-center">
@@ -63,60 +63,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $("#navbarDropdown").on('click',function () {
-          $.ajax({
-            url: '{% url 'notifications' %}',
-            dataType: 'json',
-            success: function (data) {
-                var html = "";
-                var unreadNotifications = 0;
-                if (data.userNotifications.length>0) {
-                  unreadNotifications = data.userNotifications.length;
-                }
 
-                var domain_name = '{{ request.META.HTTP_HOST }}';
-                $.each(data.userNotifications, function (i) {
-                    var add_class = '';
-                    if (i%2 != 0) {
-                      add_class = 'bg-gray';
-                    }
-                    var date = new Date(data.userNotifications[i].created_at);
-                    var formatedDate = format_date(date);
-
-                    html += "<li class='notification-box "+add_class+"'><div class='row'><div class='col-lg-3 col-sm-3 col-3 text-center'>";
-                    if (data.userNotifications[i].profile_pic) {
-                      html +=  "<img  src='/media/"+data.userNotifications[i].profile_pic+"' class='notification-box-pic rounded-circle'>";
-                    } else {
-                      html +=  "<img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'>";
-                    }
-
-
-                    html +="</div><div class='col-lg-8 col-sm-8 col-8'><div><b>"+data.userNotifications[i].user_who_fired_event_name+"</b> "+data.userNotifications[i].event_comment+"</div><small class='text-warning'>"+formatedDate+"</small></div></div></li>";
-                });
-                $(".followed_data").html(html);
-                $(".total_notifications").html(unreadNotifications);
-            }
-          });
-
-          function format_date(date) {
-            month=date.getMonth();
-            month=month+1; //javascript date goes from 0 to 11
-            if (month<10) month="0"+month; //adding the prefix
-
-            year=date.getFullYear();
-            day=date.getDate();
-            if (day<10) day="0"+day;
-
-            hour=date.getHours();
-            if (hour<10) hour="0"+hour;
-
-            minutes=date.getMinutes();
-            if (minutes<10) minutes="0"+minutes;
-
-            return day+"/"+month+"/"+year+" "+hour+":"+minutes;
-
-          }
-        });
       </script>
     {% block javascript %}
 

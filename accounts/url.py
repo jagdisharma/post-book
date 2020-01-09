@@ -13,7 +13,6 @@ urlpatterns = [
     path('profile/<str:username>', views.viewUserProfile, name='viewUserProfile'),
     path('follow/<int:user_id>', views.follow, name='follow'),
     path('unfollow/<int:user_id>', views.unfollow, name='unfollow'),
-    path('notifications', views.notifications, name='notifications'),
     path('all-notifications', views.allNotifications, name='allNotifications'),
     path('upload-profile-pic', views.uploadProfilePic, name='uploadProfilePic'),
 ]

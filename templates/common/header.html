@@ -22,20 +22,44 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a>
                 </li>
+
                 <li class="nav-item dropdown">
                   <a class="nav-link text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-bell" id="notification" style="color:#db542b;"></i>
+                    <i class="fa fa-bell" id="notification" style="color:#db542b;"></i>{% if userNotifications|length > 0 %}<span class="badge">{{ userNotifications|length }}</span>{% endif %}
                   </a>
                     <ul class="dropdown-menu">
                       <li class="head text-light" style="background:#db542b;">
                         <div class="row">
                           <div class="col-lg-12 col-sm-12 col-12">
-                            <span>Notifications (<span class="total_notifications"></span>)</span>
+                            <span>Notifications (<span class="total_notifications">{{ userNotifications|length }}</span>)</span>
                             <a href="" class="float-right text-light">Mark all as read</a>
                           </div>
                         </div>
                       </li>
-                      <div class="followed_data"></div>
+                      <div class="followed_data">
+                        {% if userNotifications|length > 0 %}
+                        {% for notification in userNotifications %}
+                         <li class='notification-box "+add_class+"'>
+                           <div class='row'>
+                             <div class='col-lg-3 col-sm-3 col-3 text-center'>
+                            {% if notification.profile_pic  %}
+                              <img  src='/media/{{ notification.profile_pic }}' class='notification-box-pic rounded-circle'>
+                            {% else %}
+                              <img src='{% static 'default_profile.png' %}' class='w-50 rounded-circle'>
+                            {% endif %}
+                            </div>
+                             <div class='col-lg-8 col-sm-8 col-8'>
+                               <div>
+                                 <b>{{notification.user_who_fired_event_name }}</b> {{ notification.event_comment }}</div>
+                               <small class='text-warning'>{{ notification.created_at }}</small>
+                             </div>
+                           </div>
+                         </li>
+                        {% endfor %}
+                        {% else %}
+                          <p class="text-center">Don't have any notifications</p>
+                        {% endif %}
+                      </div>
                       <li class="footer text-center" style="background:#db542b;">
                         <a href="{% url 'allNotifications' %}" class="text-light">View All</a>
                       </li>
