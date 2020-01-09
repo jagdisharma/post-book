@@ -48,7 +48,7 @@ def logout(request):
         auth.logout(request)
         return redirect('home')
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def profile(request):
     current_user = request.user
     following = Follower.objects.filter(user_from=current_user)
@@ -58,7 +58,7 @@ def profile(request):
         'followers': followers
     })
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def uploadProfilePic(request):
     user = request.user
     profile_pic = request.FILES.get('profile_pic', None)
@@ -67,7 +67,7 @@ def uploadProfilePic(request):
         user.save()
     return redirect('profile')
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def verify(request):
     user = get_object_or_404(User, id=request.user.id)
     if user.verified == True:
@@ -96,7 +96,7 @@ def verify(request):
             return render(request, 'register/verify.html', {'error': 'Not a valid OTP'})
     return render(request, 'register/verify.html')
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def sendOtp(request):
     try:
         otpExist = MobileVerification.objects.get(user=request.user)
@@ -118,7 +118,7 @@ def sendOtp(request):
     messages.success(request, 'Verification code has been sent.')
     return redirect('verify')
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def changePassword(request):
     if request.method == 'POST':
         if request.POST['password'] == request.POST['confirm-password']:
@@ -138,19 +138,19 @@ def changePassword(request):
     else:
         return render(request, 'profile/change-password.html')
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def following(request):
     current_user = request.user
     followings = Follower.objects.filter(user_from=current_user)
     return render(request, 'profile/following.html',{'followings': followings})
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def followers(request):
     current_user = request.user
     followers = Follower.objects.filter(user_to=current_user)
     return render(request, 'profile/followers.html',{'followers': followers})
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def viewUserProfile(request, username):
     userData = User.objects.get(username=username)# for getting single entry fron database
     if userData ==  request.user:
@@ -182,7 +182,7 @@ def viewUserProfile(request, username):
         'followedByLoggedInUser':followedByLoggedInUser
     })
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def follow(request, user_id):
     current_user = request.user
     userExists = User.objects.get(pk=user_id)
@@ -198,7 +198,7 @@ def follow(request, user_id):
         notification.save()
     return redirect('viewUserProfile' , username =userExists.username)
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def unfollow(request, user_id):
     current_user = request.user
     userExists = User.objects.get(pk=user_id)
@@ -207,7 +207,7 @@ def unfollow(request, user_id):
         follower.delete()
     return redirect('viewUserProfile' , username =userExists.username)
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def notifications(request):
     current_user = request.user
     userNotifications = Notification.objects.filter(user_to_notify=current_user,seen_by_user=False).order_by('-created_at').values()
@@ -220,7 +220,7 @@ def notifications(request):
         user['event_comment'] = get_object_or_404(Event, pk=user['event_id_id']).comment
     return JsonResponse({"userNotifications": list(userNotifications)})
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def allNotifications(request):
     current_user = request.user
     notifications = Notification.objects.filter(user_to_notify = current_user).order_by('-created_at')

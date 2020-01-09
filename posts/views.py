@@ -22,7 +22,7 @@ def home(request):
         post['posted_by_profile_pic'] = posted_by.profile_pic
     return render(request, "posts/home.html", {'posts': list(posts)})
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def create(request):
     if request.method == 'POST':
         imageFile = request.FILES.get('image', None)
@@ -39,7 +39,6 @@ def create(request):
     else:
         return render(request,'posts/create.html')
 
-@login_required(login_url='/accounts/login')
 def details(request, post_id):
     current_user = request.user.id
     postDetail = get_object_or_404(Post, pk=post_id)
@@ -51,7 +50,7 @@ def details(request, post_id):
         likedbycurrentUser = False
     return render(request, 'posts/detail.html', {'post' : postDetail,'likes':len(likes),'likedbycurrentUser':likedbycurrentUser})
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def like(request, post_id):
     current_user = request.user.id
     postExists = Post.objects.get(pk=post_id)
@@ -71,7 +70,7 @@ def like(request, post_id):
         notification.save()
     return redirect('/posts/' + str(post_id))
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/account/login')
 def myposts(request):
     posts = Post.objects.filter(posted_by=get_object_or_404(User, pk=request.user.id)).order_by('-pub_date').values()
     for post in posts:
