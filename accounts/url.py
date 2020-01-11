@@ -15,4 +15,5 @@ urlpatterns = [
     path('unfollow/<int:user_id>', views.unfollow, name='unfollow'),
     path('all-notifications', views.allNotifications, name='allNotifications'),
     path('upload-profile-pic', views.uploadProfilePic, name='uploadProfilePic'),
+    path('findusers', views.findUsers, name='findusers'),
 ]

@@ -2,12 +2,20 @@
 <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container">
-            <a href="{% url 'home' %}"><img src="{% static 'logo.png' %}" width="40" height="40" class="d-inline-block align-top"/></a>
-            <a class="navbar-brand" href="#"><h3>ost Book</h3></a>
+            <a class="navbar-brand"  href="{% url 'home' %}"><img src="{% static 'logo.png' %}" width="35" height="35" class="d-inline-block align-top"><span class="font-weight-bolder m-1">ost Book</span></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
+              </form>
+              <div class="search-result">
+                <div class="lds-ripple">
+                  <div ></div>
+                  <div></div>
+                </div>
+              </div>
               <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item">

@@ -49,6 +49,11 @@ def logout(request):
         return redirect('home')
 
 @login_required(login_url='/account/login')
+def findUsers(request):
+    users = User.objects.filter(username__startswith=request.GET['startwith']).exclude(id=request.user.id).exclude(is_superuser=True).order_by('username').values()
+    return JsonResponse({"users": list(users)})
+
+@login_required(login_url='/account/login')
 def profile(request):
     current_user = request.user
     following = Follower.objects.filter(user_from=current_user)
