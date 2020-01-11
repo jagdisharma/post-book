@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
-{% load static %}
 {% block content%}
+{% load static %}
 <h1>Notifications</h1>
 <div class="row">
     {% if notifications.all|length %}
@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <div class="row tabs-container bg-gray">
                     <div class="col-md-2" onclick="window.location='{% url 'viewUserProfile' username=notification.user_who_fired_event.username %}'">
-                        {% if notification.user_who_fired_event %}
+                        {% if notification.user_who_fired_event.profile_pic %}
                             <img src="/media/{{ notification.user_who_fired_event.profile_pic }}" width="80" height="80" style="border-radius: 50%;object-fit: cover;">
                         {% else %}
                             <img src="{% static 'default_profile.png' %}" width="80" height="80" style="border-radius: 50%;object-fit: cover;">
