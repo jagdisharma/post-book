@@ -50,7 +50,7 @@ def logout(request):
 
 @login_required(login_url='/account/login')
 def findUsers(request):
-    users = User.objects.filter(username__startswith=request.GET['startwith']).exclude(id=request.user.id).order_by('username').values()
+    users = User.objects.filter(username__startswith=request.GET['startwith'].lower()).exclude(id=request.user.id).order_by('username').values()
     # users = User.objects.filter(username__startswith=request.GET['startwith']).exclude(id=request.user.id).exclude(is_superuser=True).order_by('username').values()
     return JsonResponse({"users": list(users)})
 
