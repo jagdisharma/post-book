@@ -11,11 +11,12 @@
                         {% if notification.user_who_fired_event %}
                             <img src="/media/{{ notification.user_who_fired_event.profile_pic }}" width="80" height="80" style="border-radius: 50%;object-fit: cover;">
                         {% else %}
-                            <img src='{% static 'default_profile.png' %}' width="80" height="80" style="border-radius: 50%;object-fit: cover;">
+                            <img src="{% static 'default_profile.png' %}" width="80" height="80" style="border-radius: 50%;object-fit: cover;">
                         {% endif %}
                     </div>
                     <div class='col-md-8'>
-                            <b>{{ notification.user_who_fired_event.username }}</b> {{ notification.event_id.comment }}
+                        <b>{{ notification.user_who_fired_event.username }}</b> {{ notification.event_id.comment }}</br>
+                         <small class='text-warning '>{{ notification.created_at }}</small>
                     </div>
                 </div>
             </div>
