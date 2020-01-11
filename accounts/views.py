@@ -24,7 +24,7 @@ def signup(request):
                 # user = User.objects.get(contact_number=request.POST['contact_number'])
                 return render(request, 'register/signup.html',{'error': 'Email has been already been taken'})
             except User.DoesNotExist:
-                user= User.objects.create_user(request.POST['email'],request.POST['username'],request.POST['contact_number'], password= request.POST['password'])
+                user= User.objects.create_user(request.POST['email'].lower(),request.POST['username'].lower(),request.POST['contact_number'], password= request.POST['password'])
                 auth.login(request,user)
                 return redirect('home')
         else:
@@ -34,7 +34,7 @@ def signup(request):
 
 def login(request):
     if request.method == 'POST':
-        user = auth.authenticate(email=request.POST['email'],password= request.POST['password'])
+        user = auth.authenticate(email=request.POST['email'].lower(),password= request.POST['password'])
         if user is not None:
             auth.login(request, user)
             return redirect('home')
